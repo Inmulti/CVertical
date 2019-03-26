@@ -8,8 +8,8 @@ const mongoose = require('mongoose');
 
 const carRoutes = require('./api/routes/cars');
 const modelRoutes = require('./api/routes/models');
-const buyerRoutes = require('./api/routes/buyers');
-const purchaseRoutes = require('./api/routes/purchases');
+// const buyerRoutes = require('./api/routes/buyers');
+// const purchaseRoutes = require('./api/routes/purchases');
 
 mongoose.connect('mongodb+srv://cvErtical:cvErtical@cvertical-mhllh.mongodb.net/test?retryWrites=true', {
   useMongoClient: true,
@@ -31,8 +31,8 @@ app.use((req, res, next) => {
 
 app.use('/cars', carRoutes);
 app.use('/models', modelRoutes);
-app.use('/buyers', buyerRoutes);
-app.use('/purchases', purchaseRoutes);
+// app.use('/buyers', buyerRoutes);
+// app.use('/purchases', purchaseRoutes);
 
 app.use((req, res, next) => {
   const error = new Error('Not Found');
