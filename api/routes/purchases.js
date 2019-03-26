@@ -3,16 +3,16 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Car = require('../models/car');
+const Purchase = require('../models/purchase');
 
 router.get('/', (req, res, next) => {
-  Car.find().exec().then((docs) => {
+    Purchase.find().exec().then((docs) => {
     console.log(docs);
     if (docs.length >= 0) {
       res.status(200).json(docs);
     } else {
       res.status(404).json({
-        message: 'No cars found',
+        message: 'No purchases found',
       });
     }
   })
@@ -25,27 +25,27 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  const car = new Car({
+  const purchase = new Purchase({
       _id: new mongoose.Types.ObjectId(),
-      vin: req.body.vin,
-      model: new mongoose.Types.ObjectId(),
-      year: req.body.year,
+      Buyer: req.body.Buyer,
+      Car: req.body.Car,
+      Price: req.body.Price
   });
-  car
+  purchase
     .save()
     .then((result) => {
       console.log(result);
     })
     .catch(error => console.log(error));
   res.status(201).json({
-    message: 'Handling POST request to /cars',
-    createdCar: car,
+    message: 'Handling POST request to /purchases',
+    createdPurchase: purchase,
   });
 });
 
-router.get('/:carId', (req, res, next) => {
-  const id = req.params.carId;
-  Car.findById(id)
+router.get('/:purchaseId', (req, res, next) => {
+  const id = req.params.purchaseId;
+    Purchase.findById(id)
     .exec()
     .then((doc) => {
       console.log('From database', doc);
@@ -61,13 +61,13 @@ router.get('/:carId', (req, res, next) => {
     });
 });
 
-router.patch('/:carId', (req, res, next) => {
-  const id = req.params.carId;
+router.patch('/:purchaseId', (req, res, next) => {
+  const id = req.params.purchaseId;
   const updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  Car.update({ _id: id }, { $set: updateOps }).exec()
+    Purchase.update({ _id: id }, { $set: updateOps }).exec()
     .then((result) => {
       console.log(result);
       res.status(200).json(result);
@@ -80,9 +80,9 @@ router.patch('/:carId', (req, res, next) => {
     });
 });
 
-router.delete('/:carId', (req, res, next) => {
-  const id = req.params.carId;
-  Car.remove({ _id: id })
+router.delete('/:purchaseId', (req, res, next) => {
+  const id = req.params.purchaseId;
+    Purchase.remove({ _id: id })
     .exec()
     .then((result) => {
       res.status(200).json(result);

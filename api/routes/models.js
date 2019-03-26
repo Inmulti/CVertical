@@ -3,16 +3,16 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Car = require('../models/car');
+const Model = require('../models/model');
 
 router.get('/', (req, res, next) => {
-  Car.find().exec().then((docs) => {
+  Model.find().exec().then((docs) => {
     console.log(docs);
     if (docs.length >= 0) {
       res.status(200).json(docs);
     } else {
       res.status(404).json({
-        message: 'No cars found',
+        message: 'No models found',
       });
     }
   })
@@ -25,27 +25,26 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  const car = new Car({
-      _id: new mongoose.Types.ObjectId(),
-      vin: req.body.vin,
-      model: new mongoose.Types.ObjectId(),
-      year: req.body.year,
+  const model = new Model({
+    _id: new mongoose.Types.ObjectId(),
+    model: req.body.model,
+    make: req.body.make,
   });
-  car
+  model
     .save()
     .then((result) => {
       console.log(result);
     })
     .catch(error => console.log(error));
   res.status(201).json({
-    message: 'Handling POST request to /cars',
-    createdCar: car,
+    message: 'Handling POST request to /models',
+    createdModel: model,
   });
 });
 
-router.get('/:carId', (req, res, next) => {
-  const id = req.params.carId;
-  Car.findById(id)
+router.get('/:modelId', (req, res, next) => {
+  const id = req.params.modelId;
+  Model.findById(id)
     .exec()
     .then((doc) => {
       console.log('From database', doc);
@@ -61,13 +60,13 @@ router.get('/:carId', (req, res, next) => {
     });
 });
 
-router.patch('/:carId', (req, res, next) => {
-  const id = req.params.carId;
+router.patch('/:modelId', (req, res, next) => {
+  const id = req.params.modelId;
   const updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  Car.update({ _id: id }, { $set: updateOps }).exec()
+  Model.update({ _id: id }, { $set: updateOps }).exec()
     .then((result) => {
       console.log(result);
       res.status(200).json(result);
@@ -80,9 +79,9 @@ router.patch('/:carId', (req, res, next) => {
     });
 });
 
-router.delete('/:carId', (req, res, next) => {
-  const id = req.params.carId;
-  Car.remove({ _id: id })
+router.delete('/:modelId', (req, res, next) => {
+  const id = req.params.modelId;
+  Model.remove({ _id: id })
     .exec()
     .then((result) => {
       res.status(200).json(result);
