@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const carRoutes = require('./api/routes/cars');
 
-mongoose.connect('mongodb://cvErtical:' + process.env.MONGO_ATLAS_PW + '@cvertical-shard-00-00-mhllh.mongodb.net:27017,cvertical-shard-00-01-mhllh.mongodb.net:27017,cvertical-shard-00-02-mhllh.mongodb.net:27017/test?ssl=true&replicaSet=cvErtical-shard-0&authSource=admin&retryWrites=true', {
+mongoose.connect('mongodb+srv://cvErtical:cvErtical@cvertical-mhllh.mongodb.net/test?retryWrites=true', {
     useMongoClient: true
 });
 
@@ -42,4 +42,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-module.exports.app.serverless(app)
+module.exports = {
+    app,
+    hello: serverless(app),
+};

@@ -6,15 +6,10 @@ provider:
 
 functions:
   cars:
-    handler: app.app
+    handler: app.hello
     events:
       - http:
-          path: cars
-          method: get
-  model:
-    handler: app.app
-    events:
-    - http:
-        path: model
-        method: get
+          path: /{proxy+}
+          method: ANY
+          cors: true
 
